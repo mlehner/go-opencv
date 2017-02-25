@@ -49,12 +49,7 @@ func GcvMatToMat64(mat GcvMat) *mat64.Dense {
 
 	for i := 0; i < row; i++ {
 		for j := 0; j < col; j++ {
-			if fltPtr, ok := mat.GcvAtf64(i, j).(*float64); ok {
-				data = append(data, *fltPtr)
-			} else {
-				panic("Non *float64 passed to MatToMat64")
-			}
-
+			data = append(data, *(mat.GcvAtf64(i, j)))
 		}
 	}
 

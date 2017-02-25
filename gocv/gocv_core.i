@@ -9,6 +9,57 @@
 /* Classes defined in core.hpp */
 namespace cv {
 
+class String
+{
+public:
+    explicit String();
+    String(const String& str);
+    String(const String& str, size_t pos, size_t len = npos);
+    String(const char* s);
+    String(const char* s, size_t n);
+    String(size_t n, char c);
+    String(const char* first, const char* last);
+
+    size_t size() const;
+    size_t length() const;
+
+    const char* begin() const;
+    const char* end() const;
+
+    const char* c_str() const;
+
+    bool empty() const;
+    void clear();
+
+    int compare(const char* s) const;
+    int compare(const String& str) const;
+
+    void swap(String& str);
+    String substr(size_t pos = 0, size_t len = npos) const;
+
+    size_t find(const char* s, size_t pos, size_t n) const;
+    size_t find(char c, size_t pos = 0) const;
+    size_t find(const String& str, size_t pos = 0) const;
+    size_t find(const char* s, size_t pos = 0) const;
+
+    size_t rfind(const char* s, size_t pos, size_t n) const;
+    size_t rfind(char c, size_t pos = npos) const;
+    size_t rfind(const String& str, size_t pos = npos) const;
+    size_t rfind(const char* s, size_t pos = npos) const;
+
+    size_t find_first_of(const char* s, size_t pos, size_t n) const;
+    size_t find_first_of(char c, size_t pos = 0) const;
+    size_t find_first_of(const String& str, size_t pos = 0) const;
+    size_t find_first_of(const char* s, size_t pos = 0) const;
+
+    size_t find_last_of(const char* s, size_t pos, size_t n) const;
+    size_t find_last_of(char c, size_t pos = npos) const;
+    size_t find_last_of(const String& str, size_t pos = npos) const;
+    size_t find_last_of(const char* s, size_t pos = npos) const;
+
+    String toLowerCase() const;
+};
+
    template<typename _Tp> class Size_;
    template<typename _Tp> class Point_;
    template<typename _Tp> class Rect_;
@@ -36,15 +87,6 @@ namespace cv {
       Point_(const CvPoint2D32f& pt);
       Point_(const Size_<_Tp>& sz);
       Point_(const Vec<_Tp, 2>& v);
-
-      Point_& operator = (const Point_& pt);
-      //! conversion to another data type
-      template<typename _Tp2> operator Point_<_Tp2>() const;
-
-      //! conversion to the old-style C structures
-      operator CvPoint() const;
-      operator CvPoint2D32f() const;
-      operator Vec<_Tp, 2>() const;
 
       //! dot product
       _Tp dot(const Point_& pt) const;
@@ -79,14 +121,6 @@ namespace cv {
       Point3_(const CvPoint3D32f& pt);
       Point3_(const Vec<_Tp, 3>& v);
 
-      Point3_& operator = (const Point3_& pt);
-      //! conversion to another data type
-      template<typename _Tp2> operator Point3_<_Tp2>() const;
-      //! conversion to the old-style CvPoint...
-      operator CvPoint3D32f() const;
-      //! conversion to cv::Vec<>
-      operator Vec<_Tp, 3>() const;
-
       //! dot product
       _Tp dot(const Point3_& pt) const;
       //! dot product computed in double-precision arithmetics
@@ -118,16 +152,8 @@ namespace cv {
       Size_(const CvSize2D32f& sz);
       Size_(const Point_<_Tp>& pt);
 
-      Size_& operator = (const Size_& sz);
       //! the area (width*height)
       _Tp area() const;
-
-      //! conversion of another data type.
-      template<typename _Tp2> operator Size_<_Tp2>() const;
-
-      //! conversion to the old-style OpenCV types
-      operator CvSize() const;
-      operator CvSize2D32f() const;
 
       _Tp width, height; // the width and the height
    };
@@ -153,7 +179,6 @@ namespace cv {
       Rect_(const Point_<_Tp>& org, const Size_<_Tp>& sz);
       Rect_(const Point_<_Tp>& pt1, const Point_<_Tp>& pt2);
 
-      Rect_& operator = ( const Rect_& r );
       //! the top-left corner
       Point_<_Tp> tl() const;
       //! the bottom-right corner
@@ -163,11 +188,6 @@ namespace cv {
       Size_<_Tp> size() const;
       //! area (width*height) of the rectangle
       _Tp area() const;
-
-      //! conversion to another data type
-      template<typename _Tp2> operator Rect_<_Tp2>() const;
-      //! conversion to the old-style CvRect
-      operator CvRect() const;
 
       //! checks whether the rectangle contains the point
       bool contains(const Point_<_Tp>& pt) const;
@@ -210,6 +230,8 @@ namespace cv {
       //! copy constructor
       Mat(const Mat& m);
 
+      bool empty() const;
+
       //! builds matrix from std::vector with or without copying the data
       template<typename _Tp> explicit Mat(const vector<_Tp>& vec, bool copyData=false);
       //! builds matrix from cv::Vec; the data is copied by default
@@ -236,9 +258,9 @@ namespace cv {
       // (d=0 - the main diagonal,
       //  >0 - a diagonal from the lower half,
       //  <0 - a diagonal from the upper half)
-      Mat diag(int d=0) const;
+//      Mat diag(int d=0) const;
       //! constructs a square diagonal matrix which main diagonal is vector "d"
-      static Mat diag(const Mat& d);
+//      static Mat diag(const Mat& d);
 
       //! returns deep copy of the matrix, i.e. the data is copied
       Mat clone() const;
@@ -260,21 +282,21 @@ namespace cv {
       //! special versions for 2D arrays (especially convenient for referencing image pixels)
 
       template<typename _Tp> _Tp& at(int i0=0);
-      template<typename _Tp> const _Tp& at(int i0=0) const;
+//      template<typename _Tp> const _Tp& at(int i0=0) const;
 
       template<typename _Tp> _Tp& at(int i0, int i1);
-      template<typename _Tp> const _Tp& at(int i0, int i1) const;
+//      template<typename _Tp> const _Tp& at(int i0, int i1) const;
 
       template<typename _Tp> _Tp& at(int i0, int i1, int i2);
-      template<typename _Tp> const _Tp& at(int i0, int i1, int i2) const;
+//      template<typename _Tp> const _Tp& at(int i0, int i1, int i2) const;
 
       template<typename _Tp> _Tp& at(const int* idx);
-      template<typename _Tp> const _Tp& at(const int* idx) const;
+//      template<typename _Tp> const _Tp& at(const int* idx) const;
 
       template<typename _Tp, int n> _Tp& at(const Vec<int, n>& idx);
-      template<typename _Tp, int n> const _Tp& at(const Vec<int, n>& idx) const;
+//      template<typename _Tp, int n> const _Tp& at(const Vec<int, n>& idx) const;
       template<typename _Tp> _Tp& at(cv::Point pt);
-      template<typename _Tp> const _Tp& at(cv::Point pt) const;
+//      template<typename _Tp> const _Tp& at(cv::Point pt) const;
 
       %template(gcvAtf32) at<float>;
       %template(gcvAtf64) at<double>;
